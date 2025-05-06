@@ -86,34 +86,82 @@ class _HotelDetailState extends State<HotelDetail> {
           SliverList(delegate: SliverChildListDelegate(
             [
               Padding(padding: EdgeInsets.all(16.0),
-                child: Text("The WorldHotels properties in Dubai offer a range of stylish and "
-                    "comfortable accommodations suited for both business and leisure travelers. "
-                    "One standout is Media One Hotel in Dubai Media City, part of the WorldHotels "
-                    "Crafted Collection. This trendy, modern hotel features 264 rooms with striking "
-                    "views of the Dubai skyline, along with amenities such as a rooftop pool, sundeck, "
-                    "fitness center, and multiple dining and lounge options that create a vibrant social "
-                    "atmosphere. "),
+                child: ExpandedTextWidget(
+                    text: hotelList[index]["detail"],
+
+                ),
               ),
               Padding(padding: EdgeInsets.all(16.0),
                 child: Text(
                     "More Images", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 200.0,
                 child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (context, index){
-                  return Container(
-                    margin: EdgeInsets.all(8),
-
-                      child: Image.network("https://via.placeholder.com/200x200"));
-                }),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: hotelList[index]["images"]?.length ?? 0,
+                  itemBuilder: (context, imageIndex) {
+                    final imagePath = hotelList[index]["images"]?[imageIndex];
+                    return imagePath != null
+                        ? Container(
+                      margin: EdgeInsets.all(16),
+                      child: Image.asset("assets/images/$imagePath"),
+                    )
+                        : SizedBox(); // Fallback in case imagePath is null
+                  },
+                ),
               )
+
             ]))
         ],
       ),
     );
   }
 }
+
+class ExpandedTextWidget extends StatefulWidget {
+  const ExpandedTextWidget({super.key, required this.text});
+  final String text;
+
+  @override
+  State<ExpandedTextWidget> createState() => _ExpandedTextWidgetState();
+}
+
+class _ExpandedTextWidgetState extends State<ExpandedTextWidget> {
+  bool isExpanded=false;
+  _toggleExpansion(){
+
+    setState(() {
+      isExpanded=!isExpanded;
+    });
+
+  }
+  @override
+  Widget build(BuildContext context) {
+
+    var textWidget =Text(
+      widget.text,
+      maxLines: isExpanded?null:7,
+      overflow: isExpanded?TextOverflow.visible:TextOverflow.ellipsis,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textWidget,
+        GestureDetector(
+          onTap: (){
+            _toggleExpansion();
+          },
+          child:  Text(
+            isExpanded? 'Less': 'More',
+            style: AppStyles.textStyle.copyWith(
+              color: AppStyles.primaryColor
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+

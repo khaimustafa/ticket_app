@@ -117,7 +117,15 @@ class TicketPromotion extends StatelessWidget {
                     style: AppStyles.headLineStyle2.copyWith(
                         color: Colors.white
                     ),
-                  )
+                  ),
+                  SizedBox(height: 10), // Optional spacing
+                  Text(
+                    "❤️🥰❤️"
+                    "🥰❤️🥰", // Emojis
+                    style: TextStyle(
+                      fontSize: 38, // Adjust size as needed
+                    ),
+                  ),
                 ],
               ),
             )

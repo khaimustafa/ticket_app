@@ -7,6 +7,7 @@ import 'package:ticket_app/base/utils/app_routes.dart';
 import 'package:ticket_app/screens/widgets/hotel.dart';
 import '../../base/res/media.dart';
 import '../../base/res/styles/app_styles.dart';
+import '../../base/res/widgets/heading_text.dart';
 import '../../base/res/widgets/ticket_view.dart';
 
 
@@ -35,8 +36,7 @@ class HomeScreen extends StatelessWidget {
                        Text("Good Morning",
                            style: AppStyles.headLineStyle3),
                        const SizedBox(height: 5,),
-                       Text("Book Tickets",
-                           style: AppStyles.headLineStyle1),
+                       HeadingText(text: "Book Tickets", isColor: false,),
                      ],
                    ),
                     Container(
@@ -79,7 +79,19 @@ class HomeScreen extends StatelessWidget {
                 SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: ticketList.take(2).map((singleTicket) => TicketView( ticket:singleTicket)
+                      children: ticketList.take(2)
+                          .map((singleTicket) =>
+                        GestureDetector(
+                            onTap: (){
+                              var index = ticketList.indexOf(singleTicket);
+
+                              print("i am tapped on $index");
+                              Navigator.pushNamed(context, AppRoutes.ticketScreen, arguments:
+                              {"index": index});
+
+                            },
+
+                            child: TicketView( ticket:singleTicket))
                       ).toList(),
 
                     )
@@ -99,7 +111,15 @@ class HomeScreen extends StatelessWidget {
                       children: hotelList
                       .take(2)
                           .map((singleHotel) =>
-                          Hotel(hotel:singleHotel))
+                          GestureDetector(
+                              onTap: (){
+                                var index = hotelList.indexOf(singleHotel);
+                                print("my index is $index");
+                                Navigator.pushNamed(context, AppRoutes.hotelDetail, arguments: {
+                                  "index": index
+                                });
+                              },
+                              child: Hotel(hotel:singleHotel)))
                       .toList(),
 
                     ))
